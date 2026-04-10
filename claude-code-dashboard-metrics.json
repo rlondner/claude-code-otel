@@ -338,7 +338,7 @@
       },
       "targets": [
         {
-          "expr": "sum(claude_code_token_usage_tokens_total{type=\"input\"})",
+          "expr": "sum(increase(claude_code_token_usage_tokens_total{type=\"input\"}[$__range]))",
           "refId": "A"
         }
       ],
@@ -382,7 +382,7 @@
       },
       "targets": [
         {
-          "expr": "sum(claude_code_token_usage_tokens_total{type=\"output\"})",
+          "expr": "sum(increase(claude_code_token_usage_tokens_total{type=\"output\"}[$__range]))",
           "refId": "A"
         }
       ],
@@ -426,7 +426,7 @@
       },
       "targets": [
         {
-          "expr": "sum(claude_code_token_usage_tokens_total{type=\"cacheRead\"})",
+          "expr": "sum(increase(claude_code_token_usage_tokens_total{type=\"cacheRead\"}[$__range]))",
           "refId": "A"
         }
       ],
@@ -470,7 +470,7 @@
       },
       "targets": [
         {
-          "expr": "sum(claude_code_token_usage_tokens_total{type=\"cacheCreation\"})",
+          "expr": "sum(increase(claude_code_token_usage_tokens_total{type=\"cacheCreation\"}[$__range]))",
           "refId": "A"
         }
       ],
@@ -522,7 +522,7 @@
       },
       "targets": [
         {
-          "expr": "sum(claude_code_token_usage_tokens_total{type=\"cacheRead\"}) / (sum(claude_code_token_usage_tokens_total{type=\"cacheRead\"}) + sum(claude_code_token_usage_tokens_total{type=\"input\"})) * 100",
+          "expr": "sum(increase(claude_code_token_usage_tokens_total{type=\"cacheRead\"}[$__range])) / (sum(increase(claude_code_token_usage_tokens_total{type=\"cacheRead\"}[$__range])) + sum(increase(claude_code_token_usage_tokens_total{type=\"input\"}[$__range]))) * 100",
           "refId": "A"
         }
       ],
@@ -575,7 +575,7 @@
       },
       "targets": [
         {
-          "expr": "sum(claude_code_cost_usage_USD_total) / sum(claude_code_token_usage_tokens_total{type=\"output\"}) * 1000",
+          "expr": "sum(increase(claude_code_cost_usage_USD_total[$__range])) / sum(increase(claude_code_token_usage_tokens_total{type=\"output\"}[$__range])) * 1000",
           "refId": "A"
         }
       ],

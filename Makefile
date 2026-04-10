@@ -9,17 +9,42 @@ help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 up: ## Start the observability stack
-	@echo "🚀 Starting Claude Code observability stack..."
+	@echo "🚀 Starting Claude Code observability stack w/ Grafana..."
 	docker compose up -d
 	@echo "✅ Stack started!"
-	@echo "📊 Grafana: http://localhost:3000 (admin/admin)"
+	@echo "📊 Grafana: http://localhost:3001 (admin/admin)"
 	@echo "🔍 Prometheus: http://localhost:9090"
 	@echo "📄 Loki: http://localhost:3100"
+	@echo "📄 Jaeger: http://localhost:16686"
 
+up2: ## Start the observability stack with OpenLIT
+	@echo "🚀 Starting Claude Code observability stack w/ Grafana & OpenLIT..."
+	docker compose -f docker-compose-openlit.yml up -d
+	@echo "✅ Stack started!"
+	@echo "📊 Grafana: http://localhost:3001 (admin/admin)"
+	@echo "🔍 Prometheus: http://localhost:9090"
+	@echo "📄 Loki: http://localhost:3100"
+	@echo "📊 OpenLIT: http://localhost:3000 (user@openlit.io/openlituser)"
+
+up3: ## Start the observability stack with OpenLIT
+	@echo "🚀 Starting Claude Code with OpenLIT..."
+	docker compose -f docker-compose-openlit-standalone.yml up -d
+	@echo "✅ Stack started!"
+	@echo "📊 OpenLIT: http://localhost:3000 (user@openlit.io/openlituser)"
 
 down: ## Stop the observability stack
 	@echo "🛑 Stopping Claude Code observability stack..."
 	docker compose down
+	@echo "✅ Stack stopped!"
+
+down2: ## Stop the observability stack w/ OpenLIT
+	@echo "🛑 Stopping Claude Code observability stack w/ OpenLIT..."
+	docker compose -f docker-compose-openlit.yml down
+	@echo "✅ Stack stopped!"
+
+down3: ## Stop the observability stack w/ OpenLIT
+	@echo "🛑 Stopping Claude Code w/ OpenLIT..."
+	docker compose -f docker-compose-openlit-standalone.yml down
 	@echo "✅ Stack stopped!"
 
 restart: ## Restart the observability stack

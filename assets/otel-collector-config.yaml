@@ -2,17 +2,11 @@ receivers:
   otlp:
     protocols:
       grpc:
-        endpoint: 0.0.0.0:4319
+        endpoint: 0.0.0.0:4317
       http:
-        endpoint: 0.0.0.0:4320
+        endpoint: 0.0.0.0:4318
 
 processors:
-  # Add resource attributes for better analysis
-  resource:
-    attributes:
-      - key: environment
-        value: production
-        action: upsert
   transform:
       error_mode: ignore
       trace_statements:
@@ -57,8 +51,6 @@ processors:
           - set(attributes["gen_ai.usage.total_tokens"], attributes["gen_ai.usage.input_tokens"] + attributes["gen_ai.usage.output_tokens"]) 
             where attributes["gen_ai.usage.input_tokens"] != nil and attributes["gen_ai.usage.output_tokens"] != nil
   batch:
-      timeout: 5s
-      send_batch_size: 1024
   memory_limiter:
     # 80% of maximum memory up to 2G
     limit_mib: 1500
@@ -67,33 +59,37 @@ processors:
     check_interval: 5s
 
 exporters:
-  prometheus:
-    endpoint: "0.0.0.0:8889"
-
-  debug:
-    verbosity: normal
-
-  otlp/loki:
-    endpoint: http://loki:3100
-
-  # otlp/jaeger:
-  #   endpoint: http://jaeger:16686
-  #   tls:
-  #     insecure: true  # Set to false with proper certs in production
+  clickhouse:
+    endpoint: tcp://${env:INIT_DB_HOST}:9000?dial_timeout=10s
+    database: ${env:INIT_DB_DATABASE}
+    username: ${env:INIT_DB_USERNAME}
+    password: ${env:INIT_DB_PASSWORD}
+    ttl: 730h
+    logs_table_name: otel_logs
+    traces_table_name: otel_traces
+    # Metrics use separate tables by type: otel_metrics_gauge, otel_metrics_sum,
+    # otel_metrics_histogram, otel_metrics_summary, otel_metrics_exponential_histogram
+    timeout: 5s
+    retry_on_failure:
+      enabled: true
+      initial_interval: 5s
+      max_interval: 30s
+      max_elapsed_time: 300s
 
 service:
   pipelines:
-    metrics: 
+    logs:
       receivers: [otlp]
-      processors: [resource]
-      exporters: [prometheus, debug]
-    
-    logs:    
+      processors: [batch]
+      exporters: [clickhouse]
+    traces:
       receivers: [otlp]
-      processors: [resource]
-      exporters: [debug, otlp/loki] 
-
-    # traces:
-    #   receivers: [otlp]
-    #   processors: [transform, memory_limiter, batch]
-    #   exporters: [debug, otlp/jaeger] 
+      processors: [transform, memory_limiter, batch]
+      exporters: [clickhouse]
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [clickhouse]
+  # telemetry:
+  #   metrics:
+  #     address: localhost:8888

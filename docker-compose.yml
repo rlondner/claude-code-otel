@@ -17,9 +17,26 @@ services:
     networks:
       - otel-network
 
+  # jaeger-allinone:
+  #   image: jaegertracing/all-in-one:latest
+  #   container_name: jaeger
+  #   ports:
+  #     - "16686:16686" # Jaeger UI
+  #     - "14268:14268" # Collector HTTP (Jaeger Thrift)
+  #     - "14250:14250" # Collector gRPC (Jaeger)
+  #     - "4317:4317" # OpenTelemetry gRPC
+  #     - "4318:4318" # OpenTelemetry HTTP
+  #     - "6831:6831/udp" # Jaeger agent (compact thrift)
+  #     - "6832:6832/udp" # Jaeger agent (binary thrift)
+  #     - "9411:9411" # Zipkin compatibility
+  #   restart: unless-stopped
+  #   networks:
+  #     - otel-network
+
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
+    command: ["--config.file=/etc/prometheus/prometheus.yml", "--enable-feature=otlp-deltatocumulative", "--web.enable-admin-api"]
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
     ports:
@@ -46,16 +63,20 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_FEATURE_TOGGLES_ENABLE=logsSampleInExplore
+      - GF_SERVER_HTTP_PORT=3001
     volumes:
       - grafana-data:/var/lib/grafana
       - ./grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
       - ./grafana-dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
       - ./claude-code-dashboard.json:/var/lib/grafana/dashboards/claude-code-dashboard.json:ro
-      - ./claude-code-dashboard-economics.json:/var/lib/grafana/dashboards/claude-code-dashboard-economics.json:ro
+      - ./claude-code-dashboard-economics-max200.json:/var/lib/grafana/dashboards/claude-code-dashboard-economics-max200.json:ro
+      - ./claude-code-dashboard-economics-pro20.json:/var/lib/grafana/dashboards/claude-code-dashboard-economics-pro20.json:ro
       - ./claude-code-dashboard-metrics.json:/var/lib/grafana/dashboards/claude-code-dashboard-metrics.json:ro
+      - ./claude-code-dashboard-metrics-v2.json:/var/lib/grafana/dashboards/claude-code-dashboard-metrics-v2.json:ro
       - ./claude-code-dashboard-summary.json:/var/lib/grafana/dashboards/claude-code-dashboard-summary.json:ro
+      - ./claude-code-dashboard-unified.json:/var/lib/grafana/dashboards/claude-code-dashboard-unified.json:ro
     ports:
-      - "3001:3000"
+      - "3001:3001"
     restart: unless-stopped
     depends_on: [prometheus, loki]
     networks:

@@ -86,7 +86,8 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(increase(claude_code_session_count_total{job=\"otel-collector\"}[$__range]))",
+          
+          "expr": "count(sum by (session_id)(increase(claude_code_cost_usage_USD_total[1h])) > 0)",
           "interval": "",
           "legendFormat": "Sessions",
           "refId": "A"
@@ -284,7 +285,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(increase(claude_code_lines_of_code_count_total{job=\"otel-collector\"}[$__range]))",
+          "expr": "sum(sum_over_time(claude_code_lines_of_code_count_total{job=\"otel-collector\"}[$__range]))",
           "interval": "",
           "legendFormat": "Lines Changed",
           "refId": "A"
