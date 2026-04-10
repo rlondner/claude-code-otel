@@ -73,8 +73,10 @@ exporters:
   debug:
     verbosity: normal
 
-  otlp/loki:
-    endpoint: http://loki:3100
+  otlp_http:
+    endpoint: http://loki:3100/otlp
+    tls:
+      insecure: true
 
   # otlp/jaeger:
   #   endpoint: http://jaeger:16686
@@ -91,7 +93,7 @@ service:
     logs:    
       receivers: [otlp]
       processors: [resource]
-      exporters: [debug, otlp/loki] 
+      exporters: [debug, otlp_http] 
 
     # traces:
     #   receivers: [otlp]
