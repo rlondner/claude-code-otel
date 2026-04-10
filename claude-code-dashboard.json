@@ -86,13 +86,13 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(increase(claude_code_session_count_total{job=\"otel-collector\"}[1h]))",
+          "expr": "sum(increase(claude_code_session_count_total{job=\"otel-collector\"}[$__range]))",
           "interval": "",
-          "legendFormat": "Sessions (1h)",
+          "legendFormat": "Sessions",
           "refId": "A"
         }
       ],
-      "title": "Active Sessions (1h)",
+      "title": "Active Sessions",
       "type": "stat"
     },
     {
@@ -152,13 +152,13 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(increase(claude_code_cost_usage_USD_total{job=\"otel-collector\"}[1h]))",
+          "expr": "sum(increase(claude_code_cost_usage_USD_total{job=\"otel-collector\"}[$__range]))",
           "interval": "",
-          "legendFormat": "Cost (1h)",
+          "legendFormat": "Cost",
           "refId": "A"
         }
       ],
-      "title": "Cost (Last Hour)",
+      "title": "Cost",
       "type": "stat"
     },
     {
@@ -218,13 +218,13 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(increase(claude_code_token_usage_tokens_total{job=\"otel-collector\"}[1h]))",
+          "expr": "sum(increase(claude_code_token_usage_tokens_total{job=\"otel-collector\"}[$__range]))",
           "interval": "",
-          "legendFormat": "Tokens (1h)",
+          "legendFormat": "Tokens",
           "refId": "A"
         }
       ],
-      "title": "Token Usage (1h)",
+      "title": "Token Usage",
       "type": "stat"
     },
     {
@@ -284,13 +284,13 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(increase(claude_code_lines_of_code_count_total{job=\"otel-collector\"}[1h]))",
+          "expr": "sum(increase(claude_code_lines_of_code_count_total{job=\"otel-collector\"}[$__range]))",
           "interval": "",
-          "legendFormat": "Lines Changed (1h)",
+          "legendFormat": "Lines Changed",
           "refId": "A"
         }
       ],
-      "title": "Lines of Code (1h)",
+      "title": "Lines of Code",
       "type": "stat"
     },
     {
@@ -379,13 +379,13 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum by (model) (increase(claude_code_cost_usage_USD_total{job=\"otel-collector\"}[1h]))",
+          "expr": "sum by (model) (increase(claude_code_cost_usage_USD_total{job=\"otel-collector\"}[$__range]))",
           "interval": "",
           "legendFormat": "{{model}}",
           "refId": "A"
         }
       ],
-      "title": "Cost by Model (Hourly)",
+      "title": "Cost by Model",
       "type": "timeseries"
     },
     {
@@ -1455,7 +1455,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(increase(claude_code_commit_count_total{job=\"otel-collector\"}[1h])) or vector(0)",
+          "expr": "sum(increase(claude_code_commit_count_total{job=\"otel-collector\"}[$__range])) or vector(0)",
           "interval": "",
           "legendFormat": "Commits",
           "refId": "A"
@@ -1465,7 +1465,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(increase(claude_code_pull_request_count_total{job=\"otel-collector\"}[1h])) or vector(0)",
+          "expr": "sum(increase(claude_code_pull_request_count_total{job=\"otel-collector\"}[$__range])) or vector(0)",
           "interval": "",
           "legendFormat": "Pull Requests",
           "refId": "B"

@@ -10,8 +10,8 @@ services:
     volumes:
       - ./collector-config.yaml:/etc/otel/collector-config.yaml:ro
     ports:
-      - "4317:4317"      # OTLP gRPC in
-      - "4318:4318"      # OTLP HTTP  in
+      - "4319:4319"      # OTLP gRPC in
+      - "4320:4320"      # OTLP HTTP  in
       - "8889:8889"      # Prometheus scrape out
     restart: unless-stopped
     networks:
@@ -47,12 +47,19 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_FEATURE_TOGGLES_ENABLE=logsSampleInExplore
     volumes:
+      - grafana-data:/var/lib/grafana
       - ./grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
       - ./grafana-dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
       - ./claude-code-dashboard.json:/var/lib/grafana/dashboards/claude-code-dashboard.json:ro
+      - ./claude-code-dashboard-economics.json:/var/lib/grafana/dashboards/claude-code-dashboard-economics.json:ro
+      - ./claude-code-dashboard-metrics.json:/var/lib/grafana/dashboards/claude-code-dashboard-metrics.json:ro
+      - ./claude-code-dashboard-summary.json:/var/lib/grafana/dashboards/claude-code-dashboard-summary.json:ro
     ports:
-      - "3000:3000"
+      - "3001:3000"
     restart: unless-stopped
     depends_on: [prometheus, loki]
     networks:
-      - otel-network 
+      - otel-network
+  
+volumes:
+  grafana-data:
