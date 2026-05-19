@@ -34,6 +34,7 @@
       "type": "row"
     },
     {
+
       "description": "Real-time spending velocity extrapolated to an hourly rate, based on the last 5 minutes of activity. Reacts quickly to changes in usage intensity. Useful for spotting runaway agent loops or expensive operations in progress.",
       "fieldConfig": {
         "defaults": {
@@ -99,6 +100,7 @@
       "type": "stat"
     },
     {
+
       "description": "Cumulative API cost in USD over the selected period across all sessions and models.",
       "fieldConfig": {
         "defaults": {
@@ -218,7 +220,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum by (service_instance_id)(\r\nlast_over_time(claude_code_token_usage_tokens_total[$__range])\r\n)",
+          "expr": "sum(increase(claude_code_token_usage_tokens_total[$__range]))",
           "instant": true,
           "refId": "A"
         }
@@ -227,6 +229,7 @@
       "type": "stat"
     },
     {
+
       "description": "Current total lines of code in the project as of the latest data point in the selected period.",
       "fieldConfig": {
         "defaults": {
@@ -284,6 +287,7 @@
       "type": "stat"
     },
     {
+
       "description": "Real-time token consumption velocity across all token categories, based on the last 5 minutes of activity. Useful for monitoring active session intensity and detecting unusual spikes.",
       "fieldConfig": {
         "defaults": {
@@ -341,6 +345,7 @@
       "type": "stat"
     },
     {
+
       "description": "Number of unique Claude Code sessions that incurred API cost in the last hour. Indicates current concurrent usage activity.",
       "fieldConfig": {
         "defaults": {
@@ -419,6 +424,7 @@
       "type": "row"
     },
     {
+
       "description": "umulative time users spent actively interacting with Claude Code over the selected period. Convert to hours or minutes as needed for readability.",
       "fieldConfig": {
         "defaults": {
@@ -475,6 +481,7 @@
       "type": "stat"
     },
     {
+
       "description": "Cumulative time the Claude Code CLI was actively running over the selected period. Includes user interaction, model inference, and tool execution time.",
       "fieldConfig": {
         "defaults": {
@@ -532,6 +539,7 @@
       "type": "stat"
     },
     {
+
       "description": "Total input tokens processed at full base rate (not served from cache) over the selected period. A high value relative to cache read tokens may indicate poor cache utilization.",
       "fieldConfig": {
         "defaults": {
@@ -638,7 +646,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum by (service_instance_id)(\r\nlast_over_time(claude_code_token_usage_tokens_total{type=\"output\"}[$__range])\r\n)",
+          "expr": "sum(increase(claude_code_token_usage_tokens_total{type=\"output\"}[$__range]))",
           "instant": true,
           "refId": "A"
         }
@@ -696,7 +704,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum by (service_instance_id)(\r\nlast_over_time(claude_code_token_usage_tokens_total{type=\"cacheRead\"}[$__range])\r\n)",
+          "expr": "sum(increase(claude_code_token_usage_tokens_total{type=\"cacheRead\"}[$__range]))",
           "instant": true,
           "refId": "A"
         }
@@ -754,7 +762,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum by (service_instance_id)(\r\nlast_over_time(claude_code_token_usage_tokens_total{type=\"cacheCreation\"}[$__range])\r\n)",
+          "expr": "sum(increase(claude_code_token_usage_tokens_total{type=\"cacheCreation\"}[$__range]))",
           "instant": true,
           "refId": "A"
         }
@@ -846,6 +854,7 @@
       "type": "gauge"
     },
     {
+
       "description": "Ratio of CLI active time to user active time. Values above 1 indicate time spent on model inference and tool execution. Higher values mean Claude is doing more autonomous work per unit of user interaction.",
       "fieldConfig": {
         "defaults": {
@@ -916,6 +925,7 @@
       "type": "gauge"
     },
     {
+
       "description": "API spend over the selected period as a multiple of a $20 subscription. Values above 1.0 indicate the subscription is providing value — the higher the number, the more you're getting for your subscription dollar.",
       "fieldConfig": {
         "defaults": {
@@ -986,6 +996,7 @@
       "type": "gauge"
     },
     {
+
       "description": "Total API spend divided by output tokens generated, expressed per 1K tokens. Captures the all-in cost of producing model output, including input and caching overhead. Lower is more efficient.",
       "fieldConfig": {
         "defaults": {
@@ -1052,6 +1063,7 @@
       "type": "stat"
     },
     {
+
       "description": "Total API spend over the selected period divided by the current codebase size in lines. Measures spending relative to where the project stands now. Best for point-in-time efficiency assessment.",
       "fieldConfig": {
         "defaults": {
@@ -1118,6 +1130,7 @@
       "type": "stat"
     },
     {
+
       "description": "Current codebase size divided by total API spend over the selected period. Higher values indicate more code relative to spending. Uses the latest line count rather than the period average.",
       "fieldConfig": {
         "defaults": {
@@ -1201,6 +1214,7 @@
       "type": "row"
     },
     {
+
       "description": "Current spending velocity extrapolated to a daily rate, based on the last 1 hour of activity. Useful for budget monitoring and spotting cost anomalies. Drops to zero during periods of inactivity.",
       "fieldConfig": {
         "defaults": {
@@ -1267,6 +1281,7 @@
       "type": "stat"
     },
     {
+
       "description": "Current spending velocity extrapolated to a 30-day monthly rate, based on the last 1 hour of activity. Highly sensitive to current activity levels — best used as a directional indicator during active sessions, not a forecast.",
       "fieldConfig": {
         "defaults": {
@@ -1337,6 +1352,7 @@
       "type": "stat"
     },
     {
+
       "description": "Total spend over the last 24 hours divided by the number of unique sessions. Helps identify whether sessions are cost-efficient or if specific sessions are driving disproportionate spend. Note: session count includes all sessions in retention, not just those active in the last 24h.",
       "fieldConfig": {
         "defaults": {
@@ -1403,6 +1419,7 @@
       "type": "stat"
     },
     {
+
       "description": "Estimated developer-hours equivalent of the codebase, based on a productivity baseline of 75 lines of code per hour. Provides a rough sense of how much human effort the project represents.",
       "fieldConfig": {
         "defaults": {
@@ -1473,6 +1490,7 @@
       "type": "stat"
     },
     {
+
       "description": "Total API spend divided by hours of active user interaction. Measures the effective hourly rate of using Claude Code. Compare against developer hourly rates to gauge cost efficiency.",
       "fieldConfig": {
         "defaults": {
@@ -1543,6 +1561,7 @@
       "type": "stat"
     },
     {
+
       "description": "Codebase size divided by hours of active user interaction. Measures code leverage per hour of Claude Code usage.\nNote: reflects total codebase size, not lines produced during the period.",
       "fieldConfig": {
         "defaults": {
@@ -1626,6 +1645,7 @@
       "type": "row"
     },
     {
+
       "description": "What your usage would cost on API pricing",
       "fieldConfig": {
         "defaults": {
@@ -1696,6 +1716,7 @@
       "type": "stat"
     },
     {
+
       "description": "Net savings from using a $100 subscription versus pay-as-you-go API pricing. Positive values indicate money saved by the subscription. Negative values indicate the subscription costs more than equivalent API usage would.",
       "fieldConfig": {
         "defaults": {
@@ -1766,6 +1787,7 @@
       "type": "stat"
     },
     {
+
       "description": "Estimated dollar cost of cache write tokens in the last 24 hours. ⚠️ Verify the rate multiplier matches your cache TTL — use $3.75/MTok for 5-minute cache or $6.00/MTok for 1-hour cache (Sonnet 4.6).",
       "fieldConfig": {
         "defaults": {
@@ -1834,6 +1856,7 @@
       "type": "stat"
     },
     {
+
       "description": "Estimated dollar cost of uncached input tokens in the last 24 hours, billed at the standard base input rate ($3/MTok for Sonnet 4.6). Should be minimal relative to cache read costs in well-optimized sessions.",
       "fieldConfig": {
         "defaults": {
@@ -1898,6 +1921,7 @@
       "type": "stat"
     },
     {
+
       "description": "Estimated water consumption in US gallons associated with API usage over the selected period, based on approximate data center cooling requirements per token processed. Intended as an environmental awareness metric — actual impact varies by data center infrastructure.",
       "fieldConfig": {
         "defaults": {
@@ -1969,6 +1993,7 @@
       "type": "row"
     },
     {
+
       "description": "Token consumption over time broken down by category — input, output, cache reads, and cache writes. Visualizes the relative volume and timing of each token type across sessions.",
       "fieldConfig": {
         "defaults": {
@@ -2036,6 +2061,7 @@
       "type": "piechart"
     },
     {
+
       "description": "Proportional breakdown of token consumption by Claude model over the selected period. Identifies which models are driving the most usage — useful for cost optimization since model pricing varies significantly.",
       "fieldConfig": {
         "defaults": {
@@ -2101,6 +2127,7 @@
       "type": "piechart"
     },
     {
+
       "description": "Breakdown of active time between user interaction and CLI process time over the selected period. The gap between CLI and user time represents time spent on model thinking, tool execution, and automated operations.",
       "fieldConfig": {
         "defaults": {
@@ -2166,6 +2193,7 @@
       "type": "piechart"
     },
     {
+
       "description": "Total API cost broken down by Claude model over the selected period. Identifies which models are driving the most spend — useful for evaluating whether expensive model usage is justified or could be shifted to cheaper alternatives.",
       "fieldConfig": {
         "defaults": {
@@ -2253,6 +2281,7 @@
       "type": "row"
     },
     {
+
       "description": "Rolling 1-hour API spend broken down by Claude model. Shows when and how much each model contributes to cost over time. Useful for identifying usage patterns, peak spending periods, and model switching behavior.",
       "fieldConfig": {
         "defaults": {
@@ -2347,6 +2376,7 @@
       "type": "timeseries"
     },
     {
+
       "description": "Real-time token consumption rate per minute broken down by category. Shows the live rhythm of API usage — cache reads dominate during active sessions, output tokens spike during generation, and cache writes appear when new context is added.",
       "fieldConfig": {
         "defaults": {
@@ -2532,6 +2562,7 @@
       "type": "row"
     },
     {
+
       "description": "Number of API calls per model based on cost counter value changes over a rolling 5-minute window. Shows request volume and model switching patterns in real time. Each change represents a completed API request regardless of cost magnitude.",
       "fieldConfig": {
         "defaults": {
@@ -2666,6 +2697,7 @@
       "type": "timeseries"
     },
     {
+
       "description": "Total API spend in rolling 1-hour windows over time. Each bar represents the cost accumulated in the preceding hour. Visualizes spending rhythm across the day and highlights peak usage periods.",
       "fieldConfig": {
         "defaults": {
@@ -2758,6 +2790,7 @@
       "type": "timeseries"
     },
     {
+
       "description": "Total tokens consumed across all categories over a rolling 7-day window. Tracks week-over-week usage trends for capacity planning and budget forecasting.",
       "fieldConfig": {
         "defaults": {
@@ -2823,6 +2856,7 @@
       "type": "stat"
     },
     {
+
       "description": "Real-time spend rate ($/hr) plotted against a ±2 standard deviation band based on 1-hour smoothed trend. Breaches of the upper band indicate statistically unusual spending — potential runaway operations or cost anomalies.",
       "fieldConfig": {
         "defaults": {
@@ -2997,6 +3031,7 @@
       "id": 48,
       "panels": [
         {
+
           "description": "Real-time per-second token consumption rate broken down by category over a 5-minute smoothing window. Shows the raw throughput signal for each token type — cache reads should consistently dominate in well-cached sessions.",
           "fieldConfig": {
             "defaults": {
@@ -3091,6 +3126,7 @@
           "type": "timeseries"
         },
         {
+
           "description": "Real-time per-second token consumption rate broken down by Claude model. Shows which model is active and at what intensity. Reveals model switching patterns and relative throughput across models.",
           "fieldConfig": {
             "defaults": {
@@ -3185,6 +3221,7 @@
           "type": "timeseries"
         },
         {
+
           "description": "Real-time spending velocity in dollars per hour broken down by Claude model, based on a 5-minute smoothing window. Shows which model is driving cost at any moment — useful for identifying whether expensive model usage is intentional.",
           "fieldConfig": {
             "defaults": {
@@ -3279,6 +3316,7 @@
           "type": "timeseries"
         },
         {
+
           "description": "Running total of API spend over time broken down by Claude model. Steeper slopes indicate periods of higher spending intensity.",
           "fieldConfig": {
             "defaults": {
@@ -3397,6 +3435,7 @@
       "id": 53,
       "panels": [
         {
+
           "description": "Real-time rate of lines added and removed per minute, based on a 5-minute smoothing window. High values on both indicate active refactoring. Net difference shows codebase growth or shrinkage velocity.",
           "fieldConfig": {
             "defaults": {
@@ -3495,6 +3534,7 @@
           "type": "timeseries"
         },
         {
+
           "description": "Rolling 1-hour count of Git commits and pull requests. Shows development output cadence — commits indicate active coding, PRs indicate code ready for review. Zero-filled to avoid display gaps during inactive periods.",
           "fieldConfig": {
             "defaults": {
@@ -3595,6 +3635,7 @@
           "type": "timeseries"
         },
         {
+
           "description": "Rolling 1-day API spend compared against the same period 7 days prior. Shows week-over-week spending trends — consistent gaps indicate growing or declining usage patterns, sudden divergence signals anomalies.",
           "fieldConfig": {
             "defaults": {
@@ -3697,6 +3738,7 @@
           "type": "timeseries"
         },
         {
+
           "description": "Real-time utilization rate for user interaction and CLI process, based on a 5-minute window. Values near 1.0 indicate continuous activity, near 0.0 indicate idle. The gap between CLI and user lines represents autonomous model work.",
           "fieldConfig": {
             "defaults": {
@@ -3836,6 +3878,7 @@
       "id": 58,
       "panels": [
         {
+
           "description": "API spend per individual Claude Code session over the last 24 hours. Identifies expensive sessions and highlights outliers that may warrant investigation for cost optimization.",
           "fieldConfig": {
             "defaults": {
@@ -3929,6 +3972,7 @@
           "type": "timeseries"
         },
         {
+
           "description": "Real-time per-second rate of uncached input tokens versus output tokens generated. Shows the balance between what's sent to the model (excluding cached content) and what's produced. Useful for understanding conversation dynamics and model verbosity.",
           "fieldConfig": {
             "defaults": {
@@ -4029,6 +4073,7 @@
           "type": "timeseries"
         },
         {
+
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -4960,13 +5005,13 @@
     "list": []
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Claude Code Unified",
   "uid": "claude-code-unified",
-  "version": 72,
+  "version": 67,
   "weekStart": ""
 }

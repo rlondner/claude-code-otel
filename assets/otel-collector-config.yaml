@@ -24,12 +24,12 @@ processors:
           - set(attributes["tmp.base_input"], attributes["input_tokens"]) 
             where attributes["tmp.base_input"] == nil and attributes["input_tokens"] != nil
 
-          # Initialize cache weights to 0 so the addition logic doesn't fail on nulls
+          # Initialize cache weights to 0 so the addition logic doesn't fail on nulls 
           - set(attributes["tmp.cache_weighted"], 0)
-          - set(attributes["tmp.cache_weighted"], attributes["cache_read_tokens"] * 0.1) 
-            where attributes["cache_read_tokens"] != nil
-          - set(attributes["tmp.cache_weighted"], attributes["tmp.cache_weighted"] + (attributes["cache_creation_tokens"] * 1.25)) 
-            where attributes["cache_creation_tokens"] != nil
+          - set(attributes["tmp.cache_weighted"], attributes["cache_read_tokens"] * 1.0)
+            where attributes["cache_read_tokens"] != nil #could change the multiplier to 0.1 for cost-based weighting instead of straight token addition
+          - set(attributes["tmp.cache_weighted"], attributes["tmp.cache_weighted"] + (attributes["cache_creation_tokens"] * 1.0)) 
+            where attributes["cache_creation_tokens"] != nil #could change the multiplier to 2.0 for cost-based weighting instead of straight token addition
 
           # Set final Input Tokens: Base + Weighted Cache
           - set(attributes["gen_ai.usage.input_tokens"], attributes["tmp.base_input"] + attributes["tmp.cache_weighted"]) 
